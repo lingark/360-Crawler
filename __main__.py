@@ -40,6 +40,22 @@ def douban_top250():
                 title=movie.xpath('.//span[@class="title"]/text()')
                 score=movie.xpath('.//span[@class="rating_num"]/text()')
                 print(title[0],score[0])
-                save_to_file('douban·.txt',title[0]+':'+score[0])
+                for i in range(len(title)):
+                        save_to_file('douban·.txt',title[i]+':'+score[i])
+                        
+def news163(headers=None):
+    url='http://news.163.com/'
+    response=get_html(url,headers=headers)
+    selector=etree.HTML(response)
+    news_list=selector.xpath('//li[@class="newsdata_item"]')
+    for news in news_list:
+        title=news.xpath('.//div//a/text()')
+        href=news.xpath('.//div//a/@href')
+        time=news.xpath('.//div//span[@class="time"]/text()')
+        for i in range(len(title)):
+            save_to_file('news163.txt',title[i]+':'+href[i])
+
+
 if __name__=='__main__':
     douban_top250() # 爬取豆瓣电影top250
+    news163(headers=headers) # 爬取网易新闻
